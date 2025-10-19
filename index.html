@@ -562,6 +562,33 @@
             50% { text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 77, 109, 0.6); }
         }
 
+        /* Thank you mom text */
+        .thank-you-mom {
+            margin-bottom: 1.5rem;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .thank-you-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            color: #ff6b9d;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+            animation: thankYouGlow 4s ease-in-out infinite;
+            margin: 0;
+        }
+
+        @keyframes thankYouGlow {
+            0%, 100% { 
+                text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8), 0 0 8px rgba(255, 107, 157, 0.4);
+                transform: scale(1);
+            }
+            50% { 
+                text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8), 0 0 15px rgba(255, 107, 157, 0.7);
+                transform: scale(1.02);
+            }
+        }
+
         /* Bohoa image container */
         .bohoa-container {
             position: relative;
@@ -586,13 +613,33 @@
             transform: scale(1.05);
         }
 
+        /* Upload image diagonal (like pinned to bouquet) */
+        .upload-image-diagonal {
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transform: rotate(-15deg);
+            transition: transform 0.3s ease;
+            z-index: 10;
+            object-fit: cover;
+        }
+
+        .upload-image-diagonal:hover {
+            transform: rotate(-15deg) scale(1.1);
+        }
+
         /* Diagonal letter styles */
         .diagonal-letter {
             position: absolute;
-            top: 50%;
-            right: 10%;
-            width: 120px;
-            height: 100px;
+            top: -30px;
+            right: 20px;
+            width: 100px;
+            height: 80px;
             cursor: pointer;
             z-index: 15;
             transform: rotate(15deg);
@@ -616,9 +663,9 @@
             left: 0;
             width: 0;
             height: 0;
-            border-left: 60px solid transparent;
-            border-right: 60px solid transparent;
-            border-bottom: 35px solid #ff9eb0;
+            border-left: 50px solid transparent;
+            border-right: 50px solid transparent;
+            border-bottom: 30px solid #ff9eb0;
             transform-origin: bottom center;
             transform: rotateX(0deg);
             transition: transform 1s ease;
@@ -630,20 +677,20 @@
             position: absolute;
             bottom: 0;
             width: 100%;
-            height: 65px;
+            height: 50px;
             background: #ffc1cc;
-            border-radius: 0 0 8px 8px;
+            border-radius: 0 0 6px 6px;
             z-index: 1;
             box-shadow: inset 0 3px 5px rgba(255,255,255,0.6);
         }
 
         .diagonal-letter .heart-seal {
             position: absolute;
-            top: 20px;
+            top: 15px;
             left: 50%;
             transform: translateX(-50%);
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             background: red;
             clip-path: polygon(
                 50% 0%, 61% 10%, 70% 20%, 75% 35%,
@@ -841,16 +888,27 @@
                 font-size: 2.5rem;
             }
             
+            .thank-you-text {
+                font-size: 1.4rem;
+            }
+            
             .bohoa-image {
                 max-width: 300px;
                 max-height: 250px;
             }
             
+            .upload-image-diagonal {
+                width: 60px;
+                height: 60px;
+                top: -15px;
+                left: 15px;
+            }
+            
             .diagonal-letter {
                 width: 80px;
                 height: 70px;
-                top: 15%;
-                right: 5%;
+                top: -25px;
+                right: 15px;
             }
             
             .diagonal-letter .envelope-lid {
@@ -860,13 +918,13 @@
             }
             
             .diagonal-letter .envelope-base {
-                height: 45px;
+                height: 40px;
             }
             
             .diagonal-letter .heart-seal {
                 width: 16px;
                 height: 16px;
-                top: 15px;
+                top: 12px;
             }
         }
 
@@ -1020,9 +1078,17 @@
             <!-- Main page title -->
             <h1 class="main-page-title" id="main-page-title">Happy Women's Day 20/10</h1>
             
+            <!-- Thank you mom text -->
+            <div class="thank-you-mom">
+                <p class="thank-you-text">💖 Cảm ơn mẹ - người phụ nữ tuyệt vời nhất trong cuộc đời con 💖</p>
+            </div>
+            
             <!-- Bohoa image container -->
             <div class="bohoa-container">
                 <img src="bohoa.png" alt="Bó hoa 20/10" class="bohoa-image" id="bohoa-image">
+                
+                <!-- Upload image diagonal (like pinned to bouquet) -->
+                <img id="upload-image-diagonal" class="upload-image-diagonal hidden" alt="Ảnh trang trí">
                 
                 <!-- Diagonal letter -->
                 <div class="diagonal-letter" id="diagonal-letter">
@@ -1053,6 +1119,19 @@
                 <img id="letter-content-image" class="w-24 h-24 object-cover rounded-full shadow-lg mx-auto mb-4 border-4 border-white" alt="Ảnh trang trí" onerror="this.style.display='none'">
                 <h3 id="letter-content-title" class="letter-content-title"></h3>
                 <p id="letter-content-message" class="letter-content-message"></p>
+                
+                <!-- Mother's Day special message -->
+                <div id="mother-message" class="mt-6 p-4 bg-gradient-to-r from-pink-100 to-rose-100 rounded-lg border-2 border-pink-200">
+                    <h4 class="font-dancing text-xl text-pink-700 mb-2 text-center">💖 Gửi đến những người mẹ tuyệt vời 💖</h4>
+                    <p class="text-gray-700 text-center leading-relaxed">
+                        "Mẹ là người phụ nữ đầu tiên trong cuộc đời con, là người dạy con cách yêu thương và được yêu thương. 
+                        Nhân ngày 20/10, con muốn nói với mẹ rằng: Mẹ là người phụ nữ đẹp nhất, mạnh mẽ nhất và tuyệt vời nhất trong trái tim con. 
+                        Cảm ơn mẹ đã luôn yêu thương, che chở và hy sinh vì con. Con yêu mẹ nhiều lắm! 💕"
+                    </p>
+                    <div class="text-center mt-3">
+                        <span class="text-pink-600 font-semibold">- Với tất cả tình yêu và lòng biết ơn -</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1086,6 +1165,7 @@
         // Main page elements
         const mainPageTitle = document.getElementById('main-page-title');
         const bohoaImage = document.getElementById('bohoa-image');
+        const uploadImageDiagonal = document.getElementById('upload-image-diagonal');
         const diagonalLetter = document.getElementById('diagonal-letter');
         
         // Letter modal elements
@@ -1316,12 +1396,15 @@
             
             // Update main page title
             if (mainPageTitle) {
-                mainPageTitle.textContent = `Chúc Mừng Ngày 20/10`;
+                mainPageTitle.textContent = ` Chúc Mừng Ngày 20/10`;
             }
             
-            // Update bohoa image if available
-            if (bohoaImage && currentWomensDayData.images && currentWomensDayData.images.length > 0) {
-                bohoaImage.src = currentWomensDayData.images[0];
+            // Update upload image diagonal if available
+            if (uploadImageDiagonal && currentWomensDayData.images && currentWomensDayData.images.length > 0) {
+                uploadImageDiagonal.src = currentWomensDayData.images[0];
+                uploadImageDiagonal.classList.remove('hidden');
+            } else if (uploadImageDiagonal) {
+                uploadImageDiagonal.classList.add('hidden');
             }
         }
 
@@ -1407,4 +1490,3 @@
     </script>
 </body>
 </html>
-
