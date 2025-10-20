@@ -1224,7 +1224,7 @@
 
                 await type(h2, currentH2, 100);
                 await new Promise(r => setTimeout(r, 300));
-                await type(p1, currentP1.replace(/\n\n/g, '<br><br>'), 40); 
+                await type(p1, currentP1.replace(/\n\n/g, ''), 40); 
                 await new Promise(r => setTimeout(r, 300));
                 await type(p2, currentP2, 40);
                 await new Promise(r => setTimeout(r, 300));
@@ -1555,3 +1555,4 @@
     </script>
 </body>
 </html>
+
