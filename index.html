@@ -8,21 +8,94 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+    <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
     <style>
-        /* CSS được gộp vào đây */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(300deg, #f5a9d3, #d698cf, #bc94e6, #d399a0);
+            background-size: 240% 240%;
+            animation: gradient-animation 12s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" style="font-size: 24px;"><text y="24">💖</text></svg>') 16 16, auto;
+            overflow-y: auto; 
+            padding-top: 20px;
+            padding-bottom: 20px;
+            box-sizing: border-box; 
+        }
+        
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; 
+            width: 100%; 
+            padding: 20px;
+            z-index: 10;
+            animation: fadeInContainer 1.2s ease-out forwards;
+            box-sizing: border-box;
+        }
 
-        /* Hiệu ứng hoa anh đào rơi */
-        @keyframes fall {
+        .decoration-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .petal {
+            position: absolute;
+            background-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 0 C0 50 0 100 50 100 S100 50 50 0 Z" fill="%23FFC0CB" opacity="0.7"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            width: 20px;
+            height: 20px;
+            top: -5%;
+            pointer-events: none;
+            animation: fall-sway linear infinite;
+            z-index: 300;
+        }
+        
+        .petal.p2 {
+             background-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 0 C0 50 0 100 50 100 S100 50 50 0 Z" fill="%23f472b6" opacity="0.7"/></svg>');
+        }
+         .petal.p3 {
+             background-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 0 C0 50 0 100 50 100 S100 50 50 0 Z" fill="%23ec4899" opacity="0.7"/></svg>');
+        }
+
+        @keyframes fall-sway {
             0% {
-                transform: translateY(-10vh) translateX(-10vw) rotate(0deg);
+                transform: translateY(0) rotate(0) translateX(0);
                 opacity: 1;
             }
             100% {
-                transform: translateY(110vh) translateX(10vw) rotate(720deg);
-                opacity: 0.8;
+                transform: translateY(105vh) rotate(360deg) translateX(100px);
+                opacity: 0;
             }
         }
         
+        .sparkle {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: rgb(255, 255, 255);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: sparkle-anim 1.5s ease-in-out infinite;
+        }
+
+        @keyframes sparkle-anim {
+            0%, 100% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.5); opacity: 1; }
+        }
+
         @keyframes gradient-animation {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -40,12 +113,6 @@
             }
         }
         
-        @keyframes sparkle-anim {
-            0% { transform: scale(0); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: scale(1.5); opacity: 0; }
-        }
-
         @keyframes fadeInContainer {
             from { opacity: 0; transform: scale(0.9); }
             to { opacity: 1; transform: scale(1); }
@@ -56,117 +123,55 @@
             50% { opacity: 0; }
         }
 
-
-        body {
-            margin: 0;
+        #message-box {
+            position: relative;
+            width: 90vw;
+            max-width: 650px; 
+            background: #ffc0cb; 
+            background: rgba(255, 192, 203, 0.98); 
+            backdrop-filter: blur(2px);
+            color: #c82a5a;
+            border-radius: 15px;
+            border: 1px solid rgba(179, 90, 90, 0.7);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 0.5s ease 0.5s, transform 0.5s ease 0.5s;
+            z-index: 20;
+            display: none;
             padding: 0;
             font-family: 'Quicksand', sans-serif;
-            background: linear-gradient(300deg, #fde7f3, #fae1f7, #e9d5ff, #fecdd3); /* Nền hồng nhạt hơn */
-            background-size: 240% 240%;
-            animation: gradient-animation 12s ease infinite;
-            overflow: hidden; /* Ẩn thanh cuộn */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            /* Thay đổi con trỏ chuột */
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" style="font-size: 24px;"><text y="24">💖</text></svg>') 16 16, auto;
-        }
-
-        .decoration-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .petal {
-            position: absolute;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path fill="%23FFB6C1" d="M20,0 C30,0 40,10 40,20 C40,30 30,40 20,40 C10,40 0,30 0,20 C0,10 10,0 20,0 Z" transform="scale(0.8 1) rotate(15 20 20)"/><path fill="%23FFFFFF" d="M20,5 C28,5 35,12 35,20 C35,28 28,35 20,35 C12,35 5,28 5,20 C5,12 12,5 20,5 Z" transform="scale(0.8 1) rotate(15 20 20)"/></svg>');
-            background-size: contain;
-            background-repeat: no-repeat;
-            animation: fall 15s linear infinite;
+            font-weight: 500;
+            overflow: visible;
+            margin-top: 250px; 
+            margin-bottom: 50px;
         }
         
-        .sparkle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: #fff;
-            border-radius: 50%;
-            box-shadow: 0 0 8px #fff, 0 0 16px #fff;
-            animation: sparkle-anim 2s linear infinite;
-        }
-
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            padding: 20px;
-            z-index: 10;
-            animation: fadeInContainer 1.2s ease-out forwards;
-        }
-
         .card-container {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(10px);
+            background: #f0b6cb; 
             border-radius: 20px;
             padding: 50px 60px;
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(179, 90, 90, 0.7);
             position: relative;
             overflow: hidden;
-            transition: transform 0.1s linear; /* For 3D effect */
+            transition: transform 0.1s linear;
+            max-width: 90%; 
         }
-        
-        .corner-decoration {
-            position: absolute;
-            width: 120px;
-            height: 120px;
-            z-index: 0;
-            opacity: 0.8;
-        }
-
-        .corner-decoration svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        .corner-decoration .leaf {
-            fill: #a8d8b9;
-        }
-        .corner-decoration .stem {
-            stroke: #82b995;
-            stroke-width: 2;
-            fill: none;
-        }
-        .corner-decoration .rose-petal {
-            fill: rgba(255, 255, 255, 0.8);
-        }
-
-
-        .corner-top-left { top: 0; left: 0; transform: rotate(0deg); }
-        .corner-top-right { top: 0; right: 0; transform: rotate(90deg); }
-        .corner-bottom-left { bottom: 0; left: 0; transform: rotate(-90deg); }
-        .corner-bottom-right { bottom: 0; right: 0; transform: rotate(180deg); }
         
         .background-bouquet {
             position: absolute;
             top: 30%;
             left: 35%;
             transform: translate(-50%, -50%);
-            width: 470px; /* Phóng to hơn */
+            width: 470px;
             height: auto;
             z-index: 1;
             opacity: 1; 
             pointer-events: none;
             animation: fadeInUp 1.2s ease-out 0.7s both;
         }
-
+        
         .envelope-wrapper {
             cursor: pointer;
             text-align: center;
@@ -176,8 +181,6 @@
             transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
         
-        .envelope-wrapper:hover { transform: rotate(-5deg) scale(1.05); }
-
         .greeting-title {
             font-family: 'Dancing Script', cursive;
             color: #c82a5a;
@@ -198,6 +201,181 @@
             overflow: hidden;
         }
         
+        .instruction {
+            font-family: 'Dancing Script', cursive;
+            font-style: italic;
+            color: #c82a5a;
+            margin-top: 20px;
+            font-size: 1.5rem;
+            text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.4);
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+        }
+
+        .letter-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            overflow-y: auto; 
+            padding: 20px 0; 
+        }
+        .letter-modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+        .envelope-container {
+            width: 400px;
+            height: 280px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            perspective: 800px;
+            transition: opacity 0.5s ease 0.8s, transform 0.5s ease 0.8s;
+        }
+        
+        .message-photo-album {
+            width: 150px;
+            height: 150px;
+            position: relative;
+            float: right;
+            margin-left: 20px;
+            margin-bottom: 10px;
+            margin-top: 5px;
+        }
+
+        .message-content-wrapper {
+            padding: 30px 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding-top: 10px;
+                padding-bottom: 10px;
+                cursor: auto; 
+            }
+            
+            .card-container {
+                padding: 30px 20px;
+                width: 95%;
+                max-width: 95%; 
+            }
+
+            .envelope-wrapper:hover { 
+                transform: rotate(-12deg) scale(1); 
+            }
+
+            .greeting-title {
+                font-size: 2rem;
+                margin-bottom: 15px;
+            }
+
+            .envelope-wrapper .envelope-static {
+                width: 150px;
+                height: 105px;
+            }
+            
+            .envelope-lid-static {
+                border-left: 75px solid transparent;
+                border-right: 75px solid transparent;
+                border-top: 35px solid #faacb9;
+            }
+            
+            .instruction {
+                font-size: 1.2rem;
+            }
+            
+            .background-bouquet {
+                display: none;
+            }
+
+            .letter-modal-overlay {
+                backdrop-filter: blur(8px);
+            }
+            
+            .envelope-container {
+                display: none; 
+            }
+            
+            #message-box {
+                max-width: 95vw;
+                margin: 20px auto; 
+                margin-top: 20px; 
+                width: 95%;
+            }
+            
+            .message-content-wrapper {
+                padding: 20px;
+            }
+
+            #message-box h2 {
+                font-size: 2em;
+            }
+            
+            #message-box p {
+                font-size: 1em;
+                line-height: 1.6;
+            }
+            
+            .message-photo-album {
+                float: none; 
+                margin: 0 auto 15px auto; 
+                width: 120px;
+                height: 120px;
+            }
+            
+            .album-nav {
+                display: none; 
+            }
+            
+            .message-box-bouquet {
+                width: 300px; 
+                transform: translateX(-50%) translateY(-100%) !important;
+            }
+        }
+        
+        .corner-decoration {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            z-index: 0;
+            opacity: 0.8;
+        }
+
+        .corner-decoration svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .corner-decoration .leaf {
+            fill: #a8d8b9;
+        }
+        .corner-decoration .stem {
+            stroke: #82b995;
+            stroke-width: 2;
+            fill: none;
+        }
+        .corner-decoration .rose-petal {
+            fill: rgba(255, 255, 255, 0.8);
+        }
+
+        .corner-top-left { top: 0; left: 0; transform: rotate(0deg); }
+        .corner-top-right { top: 0; right: 0; transform: rotate(90deg); }
+        .corner-bottom-left { bottom: 0; left: 0; transform: rotate(-90deg); }
+        .corner-bottom-right { bottom: 0; right: 0; transform: rotate(180deg); }
+        
+        .envelope-wrapper:hover { transform: rotate(-5deg) scale(1.05); }
+
         .envelope-static::before {
             content: '';
             position: absolute;
@@ -254,45 +432,6 @@
         .heart-seal-static::before { top: -15px; left: 0; }
         .heart-seal-static::after { top: 0; left: -15px; }
 
-        .instruction {
-            font-family: 'Dancing Script', cursive;
-            font-style: italic;
-            color: #c82a5a;
-            margin-top: 20px;
-            font-size: 1.5rem;
-            text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.4);
-            animation: fadeInUp 0.8s ease-out 0.6s both;
-        }
-
-        /* --- Letter Modal --- */
-        .letter-modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(5px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.5s ease;
-        }
-        .letter-modal-overlay.active { opacity: 1; pointer-events: auto; }
-
-        .envelope-container {
-            width: 400px;
-            height: 280px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            perspective: 800px;
-            transition: opacity 0.5s ease 0.8s, transform 0.5s ease 0.8s;
-        }
         .letter-modal-overlay.show-message .envelope-container {
             opacity: 0;
             transform: translate(-50%, -50%) scale(0.8);
@@ -353,26 +492,6 @@
             clip-path: polygon(50% 0%, 61% 10%, 70% 20%, 75% 35%, 70% 50%, 50% 70%, 30% 50%, 25% 35%, 30% 20%, 39% 10%);
         }
 
-        #message-box {
-            position: relative;
-            width: 90vw;
-            max-width: 550px;
-            background: #fbcddb; 
-            color: #c82a5a;
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
-            opacity: 0;
-            transform: scale(0.9);
-            transition: opacity 0.5s ease 0.5s, transform 0.5s ease 0.5s;
-            z-index: 20;
-            display: none;
-            padding: 0;
-            font-family: 'Quicksand', sans-serif;
-            font-weight: 500;
-            overflow: visible; /* Cho dải ren hiển thị */
-        }
-        
         #message-box::before, #message-box::after {
             content: '🌹';
             position: absolute;
@@ -404,12 +523,6 @@
         }
         .lace-top { top: -15px; }
         .lace-bottom { bottom: -15px; transform: rotate(180deg); }
-
-        .message-content-wrapper {
-            padding: 30px 40px;
-            position: relative;
-            z-index: 1;
-        }
         
         #message-box.show { display: block; opacity: 1; transform: scale(1); }
         
@@ -427,16 +540,6 @@
             z-index: 15;
         }
         
-        .message-photo-album {
-            width: 150px;
-            height: 150px;
-            position: relative;
-            float: right;
-            margin-left: 20px;
-            margin-bottom: 10px;
-            margin-top: 5px;
-        }
-
         .message-photo-album img {
             width: 100%;
             height: 100%;
@@ -513,7 +616,6 @@
             50% { transform: translateX(-50%) rotate(45deg) scale(1.1); }
         }
 
-        /* Nút điều khiển nhạc */
         #music-control {
             position: fixed;
             bottom: 25px;
@@ -543,7 +645,6 @@
             height: 28px;
         }
 
-        /* Hiệu ứng tương tác lấp lánh */
         .interactive-sparkle {
             position: fixed;
             width: 8px;
@@ -572,14 +673,284 @@
             font-weight: bold;
             color: #c82a5a;
         }
+
+        .hidden { display: none !important; }
+        
+        .create-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .create-container.active {
+            display: flex;
+        }
+        
+        .create-form {
+            background: #f0b6cb;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border: 2px solid rgba(179, 90, 90, 0.7);
+        }
+        
+        .create-form h2 {
+            font-family: 'Dancing Script', cursive;
+            color: #c82a5a;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.5);
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #c82a5a;
+            font-size: 1.1rem;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Quicksand', sans-serif;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            box-sizing: border-box;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #c82a5a;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(200, 42, 90, 0.2);
+        }
+        
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            background: #c82a5a;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 120px;
+            font-family: 'Quicksand', sans-serif;
+        }
+        
+        .btn:hover {
+            background: #a0226b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(200, 42, 90, 0.3);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .btn-success {
+            background: #28a745;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+        }
+        
+        .selected-images {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            border: 1px solid rgba(200, 42, 90, 0.3);
+        }
+        
+        .selected-images h4 {
+            margin-bottom: 10px;
+            color: #c82a5a;
+            font-size: 1.1rem;
+        }
+        
+        .image-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .image-item {
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+        
+        .image-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid #fff;
+        }
+        
+        .remove-image {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 20px;
+            height: 20px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .share-section {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+        
+        .share-section h3 {
+            color: #c82a5a;
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+        
+        .share-link {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: #333;
+        }
+        
+        .close-create {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 30px;
+            color: #c82a5a;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+        
+        .close-create:hover {
+            background: rgba(200, 42, 90, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .create-form {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .create-form h2 {
+                font-size: 2rem;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                flex: none;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- Hiệu ứng trang trí (hoa, kim tuyến) -->
-    <div class="decoration-container"></div>
+    <div class="decoration-container"></div> 
 
-    <!-- Nội dung chính -->
-    <div class="container">
+    <div id="create-page-container" class="container">
+        <div class="card-container">
+            <div class="corner-decoration corner-top-left">
+                 <svg viewBox="0 0 100 100"><g transform="translate(10,10)"><path class="stem" d="M0 80 C 40 40, 40 40, 80 0"></path><circle class="leaf" cx="40" cy="40" r="8"></circle><circle class="rose-petal" cx="80" cy="0" r="10"></circle><circle class="rose-petal" cx="70" cy="10" r="10"></circle></g></svg>
+            </div>
+            <div class="corner-decoration corner-top-right">
+                <svg viewBox="0 0 100 100"><g transform="translate(10,10)"><path class="stem" d="M0 80 C 40 40, 40 40, 80 0"></path><circle class="leaf" cx="40" cy="40" r="8"></circle><circle class="rose-petal" cx="80" cy="0" r="10"></circle><circle class="rose-petal" cx="70" cy="10" r="10"></circle></g></svg>
+            </div>
+            <div class="corner-decoration corner-bottom-left">
+                <svg viewBox="0 0 100 100"><g transform="translate(10,10)"><path class="stem" d="M0 80 C 40 40, 40 40, 80 0"></path><circle class="leaf" cx="40" cy="40" r="8"></circle><circle class="rose-petal" cx="80" cy="0" r="10"></circle><circle class="rose-petal" cx="70" cy="10" r="10"></circle></g></svg>
+            </div>
+            <div class="corner-decoration corner-bottom-right">
+                <svg viewBox="0 0 100 100"><g transform="translate(10,10)"><path class="stem" d="M0 80 C 40 40, 40 40, 80 0"></path><circle class="leaf" cx="40" cy="40" r="8"></circle><circle class="rose-petal" cx="80" cy="0" r="10"></circle><circle class="rose-petal" cx="70" cy="10" r="10"></circle></g></svg>
+            </div>
+            
+            <img src="bohoa.png" alt="Bó hoa nền" class="background-bouquet">
+
+            <div class="envelope-wrapper">
+                <h2 class="greeting-title">💌 Tạo Thiệp Đặc Biệt</h2>
+                <div class="envelope-static">
+                    <div class="envelope-lid-static"></div>
+                    <div class="envelope-lid-shadow"></div>
+                    <div class="heart-seal-static"></div>
+                </div>
+                <p class="instruction">Gửi tình yêu qua những lời nhắn...</p>
+                <button id="create-page-btn" class="btn" style="margin-top: 20px; background: rgba(200, 42, 90, 0.8); border: 2px solid rgba(255, 255, 255, 0.5);">✨ Tạo Thiệp</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="card-page-container" class="container hidden">
         <div class="card-container">
             <div class="corner-decoration corner-top-left">
                  <svg viewBox="0 0 100 100"><g transform="translate(10,10)"><path class="stem" d="M0 80 C 40 40, 40 40, 80 0"></path><circle class="leaf" cx="40" cy="40" r="8"></circle><circle class="rose-petal" cx="80" cy="0" r="10"></circle><circle class="rose-petal" cx="70" cy="10" r="10"></circle></g></svg>
@@ -608,7 +979,6 @@
         </div>
     </div>
 
-    <!-- Modal chứa thư và hiệu ứng -->
     <div class="letter-modal-overlay">
         <div class="envelope-container">
             <div class="envelope-lid"></div>
@@ -621,13 +991,9 @@
             <button class="modal-close-btn">&times;</button>
             
             <div class="message-content-wrapper">
-                <!-- ALBUM ẢNH -->
                 <div class="message-photo-album">
-                    <!-- THAY ẢNH 1: Thay link trong src="..." bằng link ảnh của bạn -->
                     <img src="https://images.unsplash.com/photo-1541560052-771a3f7155d8?q=80&w=1887&auto=format&fit=crop" alt="Ảnh kỷ niệm 1" class="active">
-                    <!-- THAY ẢNH 2: Thay link trong src="..." bằng link ảnh của bạn -->
                     <img src="https://images.unsplash.com/photo-1594752643129-7c1f80a71f54?q=80&w=1887&auto=format&fit=crop" alt="Ảnh kỷ niệm 2">
-                    <!-- THAY ẢNH 3: Thay link trong src="..." bằng link ảnh của bạn -->
                     <img src="https://images.unsplash.com/photo-1593104547489-5cfb3839a3b5?q=80&w=2053&auto=format&fit=crop" alt="Ảnh kỷ niệm 3">
                     
                     <button class="album-nav album-prev">&lt;</button>
@@ -650,26 +1016,71 @@ Một mùa 20/10 nữa lại về mà con không thể ở gần để tự tay 
              <div class="lace lace-bottom"></div>
         </div>
         
-        <!-- Bó hoa xuất hiện sau khi mở thư -->
         <img src="bohoa.png" alt="Bó hoa tặng mẹ" class="message-box-bouquet">
 
     </div>
 
-    <!-- Nút điều khiển nhạc -->
     <div id="music-control" title="Bật/Tắt nhạc">
         <svg id="icon-music-on" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
         <svg id="icon-music-off" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="display: none;"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"></path></svg>
     </div>
 
-    <!-- Nhạc nền -->
     <audio id="background-music" src="https://cdn.pixabay.com/download/audio/2022/10/13/audio_b28b8a5362.mp3" loop></audio>
+
+    <div id="create-container" class="create-container">
+        <div class="create-form">
+            <button id="close-create" class="close-create">&times;</button>
+            <h2>✨ Tạo Trang Mới</h2>
+            
+            <div id="form-section">
+                <div class="form-group">
+                    <label for="sender-name">Tên người gửi</label>
+                    <input type="text" id="sender-name" placeholder="Nhập tên của bạn">
+                </div>
+                
+                <div class="form-group">
+                    <label for="recipient-name">Tên người nhận</label>
+                    <input type="text" id="recipient-name" placeholder="Nhập tên người bạn yêu thương">
+                </div>
+                
+                <div class="form-group">
+                    <label for="message-content">Lời nhắn</label>
+                    <textarea id="message-content" placeholder="Viết lời nhắn của bạn..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Chọn hình ảnh</label>
+                    <button id="upload-images-btn" class="btn btn-secondary">📸 Upload Ảnh</button>
+                    <div id="selected-images" class="selected-images hidden">
+                        <h4>Ảnh đã chọn:</h4>
+                        <div id="image-preview" class="image-preview"></div>
+                    </div>
+                </div>
+                
+                <div class="btn-group">
+                    <button id="create-page" class="btn btn-success">🎉 Tạo Trang</button>
+                    <button id="cancel-create" class="btn btn-secondary">❌ Hủy</button>
+                </div>
+            </div>
+            
+            <div id="share-section" class="share-section hidden">
+                <h3>🎉 Trang của bạn đã sẵn sàng!</h3>
+                <p>Chia sẻ link này với người ấy:</p>
+                <div id="share-link" class="share-link"></div>
+                <div class="btn-group">
+                    <button id="copy-link" class="btn btn-success">📋 Sao chép Link</button>
+                    <button id="create-new" class="btn btn-secondary">🔄 Tạo Trang Mới</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // === DOM Elements ===
-            const mainContainer = document.querySelector('.container');
-            const cardContainer = document.querySelector('.card-container');
-            const envelopeWrapper = document.querySelector('.envelope-wrapper');
+            const createPageContainer = document.getElementById('create-page-container');
+            const cardPageContainer = document.getElementById('card-page-container');
+            const cardContainer = cardPageContainer.querySelector('.card-container');
+            const envelopeWrapper = cardPageContainer.querySelector('.envelope-wrapper');
             const music = document.getElementById('background-music');
             const decorationContainer = document.querySelector('.decoration-container');
             const letterModal = document.querySelector('.letter-modal-overlay');
@@ -683,11 +1094,30 @@ Một mùa 20/10 nữa lại về mà con không thể ở gần để tự tay 
             const albumPrevBtn = document.querySelector('.album-prev');
             const albumNextBtn = document.querySelector('.album-next');
             
-            // === State ===
+            const createPageBtn = document.getElementById('create-page-btn');
+            const createContainer = document.getElementById('create-container');
+            const closeCreateBtn = document.getElementById('close-create');
+            const cancelCreateBtn = document.getElementById('cancel-create');
+            const createPageBtnForm = document.getElementById('create-page');
+            const uploadImagesBtn = document.getElementById('upload-images-btn');
+            const selectedImagesDiv = document.getElementById('selected-images');
+            const imagePreviewDiv = document.getElementById('image-preview');
+            const formSection = document.getElementById('form-section');
+            const shareSection = document.getElementById('share-section');
+            const shareLinkDiv = document.getElementById('share-link');
+            const copyLinkBtn = document.getElementById('copy-link');
+            const createNewBtn = document.getElementById('create-new');
+            
+            const senderNameInput = document.getElementById('sender-name');
+            const recipientNameInput = document.getElementById('recipient-name');
+            const messageContentInput = document.getElementById('message-content');
+            
             let hasInteracted = false;
             let currentImageIndex = 0;
-
-            // === Functions ===
+            let isTyping = false;
+            
+            let uploadedImages = [];
+            let currentPageData = null;
 
             function type(element, text, speed = 50) {
                 return new Promise(resolve => {
@@ -723,9 +1153,36 @@ Một mùa 20/10 nữa lại về mà con không thể ở gần để tự tay 
                 setTimeout(() => clearInterval(interval), 1500);
             }
 
+            async function startTyping() {
+                isTyping = true;
+                const h2 = messageBox.querySelector('h2');
+                const p1 = messageBox.querySelectorAll('.message-content p')[0];
+                const p2 = messageBox.querySelectorAll('.message-content p')[1];
+                const signature = messageBox.querySelector('.signature');
+
+                const originalH2 = 'Mẹ Yêu Quý,'; 
+                const originalP1 = 'Gửi mẹ, người phụ nữ con yêu thương nhất!\n\nMột mùa 20/10 nữa lại về mà con không thể ở gần để tự tay tặng mẹ một bó hoa. Con ở xa nhớ mẹ và gia đình mình nhiều lắm. Con chỉ biết gọi điện để được nghe giọng nói của mẹ cho vơi đi nỗi nhớ. Mẹ ở nhà nhớ giữ gìn sức khỏe, bớt đi những lo toan, phiền muộn mẹ nhé. Con sẽ sớm về thăm mẹ. Chúc mẹ của con một ngày 20/10 thật ấm áp và an yên.'; 
+                const originalP2 = 'Con yêu và nhớ mẹ.'; 
+                const originalSignature = 'Con của Mẹ'; 
+                
+                h2.innerHTML = '';
+                p1.innerHTML = '';
+                p2.innerHTML = '';
+                signature.innerHTML = '';
+
+                await type(h2, originalH2, 100);
+                await new Promise(r => setTimeout(r, 300));
+                await type(p1, originalP1.replace(/\n\n/g, '<br><br>'), 40); 
+                await new Promise(r => setTimeout(r, 300));
+                await type(p2, originalP2, 40);
+                await new Promise(r => setTimeout(r, 300));
+                await type(signature, originalSignature, 70);
+                isTyping = false;
+            }
+
             function openLetter() {
                 if (!hasInteracted) {
-                    music.play().catch(error => {});
+                    music.play().catch(error => {}); 
                     iconMusicOn.style.display = 'block';
                     iconMusicOff.style.display = 'none';
                     hasInteracted = true;
@@ -739,32 +1196,7 @@ Một mùa 20/10 nữa lại về mà con không thể ở gần để tự tay 
                     setTimeout(() => {
                         letterModal.classList.add('show-message');
                         messageBox.classList.add('show');
-
-                        const h2 = messageBox.querySelector('h2');
-                        const p1 = messageBox.querySelectorAll('.message-content p')[0];
-                        const p2 = messageBox.querySelectorAll('.message-content p')[1];
-                        const signature = messageBox.querySelector('.signature');
-
-                        const originalH2 = h2.innerHTML;
-                        const originalP1 = p1.innerHTML;
-                        const originalP2 = p2.innerHTML;
-                        const originalSignature = signature.innerHTML;
                         
-                        h2.innerHTML = '';
-                        p1.innerHTML = '';
-                        p2.innerHTML = '';
-                        signature.innerHTML = '';
-
-                        async function startTyping() {
-                            await type(h2, originalH2, 100);
-                            await new Promise(r => setTimeout(r, 300));
-                            await type(p1, originalP1, 40);
-                            await new Promise(r => setTimeout(r, 300));
-                            await type(p2, originalP2, 40);
-                            await new Promise(r => setTimeout(r, 300));
-                            await type(signature, originalSignature, 70);
-                        }
-
                         setTimeout(startTyping, 600);
 
                     }, 1000);
@@ -772,22 +1204,22 @@ Một mùa 20/10 nữa lại về mà con không thể ở gần để tự tay 
             }
 
             function closeLetter() {
-                messageBox.classList.remove('show');
-                letterModal.classList.remove('show-message');
-
-                // Restore text immediately
                 const h2 = messageBox.querySelector('h2');
-                h2.innerHTML = 'Mẹ Yêu Quý,';
                 const paragraphs = messageBox.querySelectorAll('.message-content p');
-                paragraphs[0].innerHTML = 'Nhân ngày Phụ nữ Việt Nam 20/10, con chúc Mẹ không chỉ hôm nay mà tất cả 365 ngày trong năm đều luôn vui vẻ, hạnh phúc và thật nhiều sức khỏe.';
-                paragraphs[1].innerHTML = 'Cảm ơn Mẹ vì đã luôn là hậu phương vững chắc cho con. Con yêu Mẹ rất nhiều! ❤️';
                 const signature = messageBox.querySelector('.signature');
+                
+                h2.innerHTML = 'Mẹ Yêu Quý,';
+                paragraphs[0].innerHTML = 'Gửi mẹ, người phụ nữ con yêu thương nhất!<br><br>Một mùa 20/10 nữa lại về mà con không thể ở gần để tự tay tặng mẹ một bó hoa. Con ở xa nhớ mẹ và gia đình mình nhiều lắm. Con chỉ biết gọi điện để được nghe giọng nói của mẹ cho vơi đi nỗi nhớ. Mẹ ở nhà nhớ giữ gìn sức khỏe, bớt đi những lo toan, phiền muộn mẹ nhé. Con sẽ sớm về thăm mẹ. Chúc mẹ của con một ngày 20/10 thật ấm áp và an yên.';
+                paragraphs[1].innerHTML = 'Con yêu và nhớ mẹ.';
                 signature.innerHTML = 'Con của Mẹ';
 
                 h2.classList.remove('typing-cursor');
                 paragraphs[0].classList.remove('typing-cursor');
                 paragraphs[1].classList.remove('typing-cursor');
                 signature.classList.remove('typing-cursor');
+                
+                messageBox.classList.remove('show');
+                letterModal.classList.remove('show-message');
                 
                 setTimeout(() => {
                     envelopeContainer.classList.remove('letter-open');
@@ -802,31 +1234,33 @@ Một mùa 20/10 nữa lại về mà con không thể ở gần để tự tay 
                     img.classList.toggle('active', index === currentImageIndex);
                 });
             }
-
+            
             function createDecorations() {
-                const createElements = (count, className) => {
-                    for (let i = 0; i < count; i++) {
-                        const el = document.createElement('div');
-                        el.className = className;
-                        el.style.left = `${Math.random() * 100}vw`;
-                        el.style.animationDuration = `${Math.random() * 5 + 10}s`;
-                        el.style.animationDelay = `${Math.random() * 10}s`;
-                        if (className === 'petal') {
-                            const size = `${Math.random() * 10 + 10}px`;
-                            el.style.width = size;
-                            el.style.height = size;
-                            el.style.opacity = Math.random() * 0.5 + 0.5;
-                        } else {
-                            el.style.top = `${Math.random() * 100}vh`;
-                        }
-                        decorationContainer.appendChild(el);
-                    }
-                };
-                createElements(40, 'petal');
-                createElements(25, 'sparkle');
+                for (let i = 0; i < 25; i++) {
+                    let petal = document.createElement('div');
+                    let petalType = Math.ceil(Math.random() * 3);
+                    petal.className = `petal p${petalType}`;
+                    petal.style.left = Math.random() * 100 + 'vw';
+                    petal.style.width = (Math.random() * 10 + 10) + 'px';
+                    petal.style.height = petal.style.width;
+                    const animationDuration = Math.random() * 7 + 8; 
+                    const animationDelay = Math.random() * 10;
+                    petal.style.animationDuration = animationDuration + 's';
+                    petal.style.animationDelay = animationDelay + 's';
+                    if(Math.random() > 0.5) petal.style.animationDirection = 'reverse';
+                    decorationContainer.appendChild(petal);
+                }
+                
+                for (let i = 0; i < 25; i++) {
+                    let sparkle = document.createElement('div');
+                    sparkle.className = 'sparkle';
+                    sparkle.style.left = Math.random() * 100 + 'vw';
+                    sparkle.style.top = Math.random() * 100 + 'vh';
+                    sparkle.style.animationDelay = Math.random() * 1.5 + 's';
+                    decorationContainer.appendChild(sparkle);
+                }
             }
 
-            // === Event Listeners ===
             envelopeWrapper.addEventListener('click', openLetter);
             closeModalBtn.addEventListener('click', closeLetter);
             letterModal.addEventListener('click', e => {
@@ -846,6 +1280,23 @@ Một mùa 20/10 nữa lại về mà con không thể ở gần để tự tay 
                 hasInteracted = true;
             });
 
+            if (window.innerWidth > 768) {
+                cardContainer.addEventListener('mousemove', e => {
+                    const rect = cardContainer.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const rotateY = (x - rect.width / 2) / 20;
+                    const rotateX = (rect.height / 2 - y) / 20;
+                    cardContainer.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                });
+
+                cardContainer.addEventListener('mouseleave', () => {
+                    cardContainer.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+                });
+            } else {
+                cardContainer.style.transition = 'none'; 
+            }
+
             document.addEventListener('mousemove', e => {
                 const sparkle = document.createElement('div');
                 sparkle.className = 'interactive-sparkle';
@@ -855,19 +1306,6 @@ Một mùa 20/10 nữa lại về mà con không thể ở gần để tự tay 
                 sparkle.style.top = `${e.clientY}px`;
 
                 setTimeout(() => sparkle.remove(), 600);
-            });
-
-            cardContainer.addEventListener('mousemove', e => {
-                const rect = cardContainer.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                const rotateY = (x - rect.width / 2) / 20;
-                const rotateX = (rect.height / 2 - y) / 20;
-                cardContainer.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-            });
-
-            cardContainer.addEventListener('mouseleave', () => {
-                cardContainer.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
             });
             
             albumNextBtn.addEventListener('click', () => {
@@ -879,14 +1317,174 @@ Một mùa 20/10 nữa lại về mà con không thể ở gần để tự tay 
                 currentImageIndex = (currentImageIndex - 1 + albumImages.length) % albumImages.length;
                 updateAlbum();
             });
+            
+            createPageBtn.addEventListener('click', openCreateForm);
+            closeCreateBtn.addEventListener('click', closeCreateForm);
+            cancelCreateBtn.addEventListener('click', closeCreateForm);
+            createPageBtnForm.addEventListener('click', createNewPage);
+            uploadImagesBtn.addEventListener('click', () => cloudinaryWidget.open());
+            copyLinkBtn.addEventListener('click', copyShareLink);
+            createNewBtn.addEventListener('click', resetCreateForm);
 
+            const cloudinaryWidget = cloudinary.createUploadWidget({
+                cloudName: 'dyk8aumyf',
+                uploadPreset: 'ml_default',
+                sources: ['local', 'url', 'camera'],
+                multiple: true,
+                maxFiles: 10,
+                folder: 'valentine-images',
+                resourceType: 'image',
+            }, (error, result) => {
+                if (error) {
+                    alert('Có lỗi khi upload ảnh. Vui lòng thử lại.');
+                    return;
+                }
+                if (result && result.event === "success") {
+                    uploadedImages.push(result.info.secure_url);
+                    updateImagePreview();
+                }
+            });
+            
+            function updateImagePreview() {
+                imagePreviewDiv.innerHTML = '';
+                if (uploadedImages.length > 0) {
+                    selectedImagesDiv.classList.remove('hidden');
+                    uploadedImages.forEach((imgSrc, index) => {
+                        const imageItem = document.createElement('div');
+                        imageItem.className = 'image-item';
+                        
+                        const img = document.createElement('img');
+                        img.src = imgSrc;
+                        img.alt = `Ảnh ${index + 1}`;
+                        
+                        const removeBtn = document.createElement('button');
+                        removeBtn.className = 'remove-image';
+                        removeBtn.innerHTML = '×';
+                        removeBtn.onclick = function() {
+                            uploadedImages.splice(index, 1);
+                            updateImagePreview();
+                        };
+                        
+                        imageItem.appendChild(img);
+                        imageItem.appendChild(removeBtn);
+                        imagePreviewDiv.appendChild(imageItem);
+                    });
+                } else {
+                    selectedImagesDiv.classList.add('hidden');
+                }
+            }
+            
+            function openCreateForm() {
+                createContainer.classList.add('active');
+                formSection.classList.remove('hidden');
+                shareSection.classList.add('hidden');
+                senderNameInput.value = '';
+                recipientNameInput.value = '';
+                messageContentInput.value = '';
+                uploadedImages = [];
+                updateImagePreview();
+            }
+            
+            function closeCreateForm() {
+                createContainer.classList.remove('active');
+            }
+            
+            function createNewPage() {
+                const senderName = senderNameInput.value.trim() || 'Người Gửi Ẩn Danh';
+                const recipientName = recipientNameInput.value.trim() || 'Người Đặc Biệt';
+                const messageContent = messageContentInput.value.trim() || 'Gửi bạn lời chúc tốt đẹp nhất!';
+                
+                currentPageData = {
+                    senderName,
+                    recipientName,
+                    messageContent,
+                    images: uploadedImages,
+                    musicUrl: 'https://cdn.pixabay.com/download/audio/2022/10/13/audio_b28b8a5362.mp3'
+                };
+                
+                const encodedData = btoa(encodeURIComponent(JSON.stringify(currentPageData)));
+                const shareUrl = `${window.location.origin}${window.location.pathname}?data=${encodedData}`;
+                
+                formSection.classList.add('hidden');
+                shareSection.classList.remove('hidden');
+                shareLinkDiv.textContent = shareUrl;
+            }
+            
+            function copyShareLink() {
+                navigator.clipboard.writeText(shareLinkDiv.textContent)
+                    .then(() => {
+                        copyLinkBtn.textContent = '✅ Đã sao chép!';
+                        setTimeout(() => {
+                            copyLinkBtn.textContent = '📋 Sao chép Link';
+                        }, 2000);
+                    })
+                    .catch(() => {
+                        alert('Không thể sao chép link. Vui lòng copy thủ công.');
+                    });
+            }
+            
+            function resetCreateForm() {
+                formSection.classList.remove('hidden');
+                shareSection.classList.add('hidden');
+                senderNameInput.value = '';
+                recipientNameInput.value = '';
+                messageContentInput.value = '';
+                uploadedImages = [];
+                updateImagePreview();
+            }
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const pageDataParam = urlParams.get('data');
+            
+            if (pageDataParam) {
+                createPageContainer.classList.add('hidden');
+                cardPageContainer.classList.remove('hidden');
+                try {
+                    const pageData = JSON.parse(decodeURIComponent(atob(pageDataParam)));
+                    updatePageWithCustomData(pageData);
+                } catch (error) {
+                    console.error('Error decoding page data:', error);
+                }
+            } else {
+                createPageContainer.classList.remove('hidden');
+                cardPageContainer.classList.add('hidden');
+            }
+            
+            function updatePageWithCustomData(data) {
+                const instruction = cardPageContainer.querySelector('.instruction');
+                if (instruction) {
+                    instruction.textContent = `Gửi mẹ thân yêu `;
+                }
+                
+                const messageH2 = messageBox.querySelector('h2');
+                const messageP1 = messageBox.querySelectorAll('.message-content p')[0];
+                const messageP2 = messageBox.querySelectorAll('.message-content p')[1];
+                const signature = messageBox.querySelector('.signature');
+                
+                if (messageH2) messageH2.textContent = `Mẹ ${data.recipientName} yêu quý,`;
+                if (messageP1) messageP1.textContent = data.messageContent;
+                if (messageP2) messageP2.textContent = '';
+                if (signature) signature.textContent = data.senderName;
+                
+                if (data.images && data.images.length > 0) {
+                    const albumImages = document.querySelectorAll('.message-photo-album img');
+                    data.images.forEach((imgSrc, index) => {
+                        if (albumImages[index]) {
+                            albumImages[index].src = imgSrc;
+                        }
+                    });
+                }
+                
+                if (data.musicUrl) {
+                    music.src = data.musicUrl;
+                }
+            }
 
-            // === Initialisation ===
-            mainContainer.classList.add('visible'); // Show main container immediately
-            createDecorations();
-            updateAlbum(); // Show the first image initially
+            if (cardPageContainer.classList.contains('hidden') === false) {
+                createDecorations();
+                updateAlbum();
+            } 
         });
     </script>
 </body>
 </html>
-
